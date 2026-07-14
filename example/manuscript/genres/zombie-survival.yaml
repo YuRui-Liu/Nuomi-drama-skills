@@ -1,0 +1,56 @@
+genre_id: zombie-survival
+display_name: 末日求生
+source: template
+hardconstraints: []
+identity:
+  one_liner: 丧尸末日背景下，幸存者在废墟中组队、信任、背叛与突围，人性在绝望中闪烁
+  audience: 全龄向 16-50 岁，冒险/生存/人性博弈核心受众
+  conflict_source:
+  - 资源争夺
+  - 人性考验
+  - 团队背叛
+  - 末日压力
+  - 感染危机
+rhythm:
+  open_3s: 一幕末日场景触发，主角陷入生死抉择
+  open_30s: 建立废墟背景与团队初识，交付第一次逃亡紧张
+  beat_density: 每分钟 3-4 个高危时刻/人性反转，缓急交替保节奏
+satisfaction_weights:
+  生存反转: 40
+  人性反差: 30
+  紧张悬念: 20
+  温情时刻: 10
+writing_rules:
+- 生存压力要具体可感：资源限制、伤情处理、路线选择，避免悬浮设定
+- 末日中的人性对比：正常世界的道德 vs 绝望中的抉择，制造真实张力
+- 团队组建要有信任建立过程，不能空降一支队伍
+- 每集结尾需一次威胁升级或背叛反转，推动故事向下一个死局逼近
+- 温情瞬间（共食、互救、承诺）点缀在绝望中，增强代入感
+- 关键逃亡标 ⚠️、信任考验标 💔，做情节配额校验
+donts:
+- 不要让末日沦为背景布景，压力要贯穿全程
+- 不要过度渲染暴力压低代入感，聚焦人物选择与后果
+- 不要团队内无逻辑冲突，背叛需有铺垫
+- 不要救援太轻松，每次逃脱都是代价
+- 不要忽视伤病、饥渴、疲惫的现实描写
+params_default:
+  split_unit: episode
+  duration_per_unit_sec: 60
+  rhythm_driver: plot
+  grids_per_unit: 9
+inner_slots:
+  decompose_strategy: narrative
+  polish_style: high-energy
+transitions:
+  default_accent: fadeblack
+  palette:
+  - fadeblack
+  - dissolve
+  - cut
+  base_frequency: 0.4
+  default_duration: 0.3
+推荐风格: real/cinematic-warm-v1
+基调软提示:
+  情感温度: 冷静沉着
+  叙事节奏: 紧张压抑
+  人物弧光: 绝望中觉醒

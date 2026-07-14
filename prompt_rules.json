@@ -1,0 +1,64 @@
+{
+  "version": "ltx-2.3",
+  "description": "LTX 2.3 video prompt validation rules. Swap this file for new LTX versions without code changes.",
+  "hard_blocks": [
+    {
+      "rule": "no_abstract_emotion",
+      "description": "Abstract emotion labels — LTX cannot interpret 'is sad'. Use physical cues instead.",
+      "patterns_zh": [
+        "很难过", "很伤心", "很生气", "很害怕", "很紧张",
+        "很焦虑", "很兴奋", "很沮丧", "很绝望", "很愤怒",
+        "很恐惧", "悲伤地", "愤怒地", "恐惧地", "痛苦地", "焦虑地"
+      ],
+      "patterns_en": [
+        "\\b(is|feels|looks|seems|appears)\\s+(sad|angry|scared|nervous|anxious|excited|frustrated|desperate|furious|terrified|happy|confused|depressed)\\b"
+      ],
+      "message_zh": "抽象情绪标签，请用身体线索替代（如「肩膀下垂，眼睛盯着地面」而非「很难过」）",
+      "message_en": "Abstract emotion label detected: use physical cues instead. e.g. 'shoulders slump, eyes fixed on floor' NOT 'looks sad'"
+    },
+    {
+      "rule": "no_text_logo",
+      "description": "Text/logo descriptions — LTX cannot reliably render on-screen text.",
+      "patterns": [
+        "\\b(text|logo|lettering|sign|billboard|subtitle|caption|headline|brand\\s*name|watermark|typography|words?\\s+on\\s+screen|written\\s+text|onscreen\\s+text)\\b"
+      ],
+      "message_zh": "文本/Logo 描述，LTX 无法可靠渲染屏幕文字。请移除所有屏幕文字的引用。",
+      "message_en": "Text/logo description detected: LTX cannot reliably render text. Remove references to on-screen text, logos, signs, or written words."
+    }
+  ],
+  "soft_warnings": [
+    {
+      "rule": "complex_physics_warning",
+      "description": "Complex physics (shatter/explode/fragment) likely produce visible artifacts.",
+      "patterns": [
+        "\\b(shatters?|shattering|explodes?|exploding|fragments?|fragmenting|bursts?\\s+into\\s+pieces|disintegrate|disintegrates|pulverize|crumbles?\\s+into|breaks?\\s+apart\\s+into\\s+(tiny|small|many)\\s+pieces|splinters?|splintering)\\b"
+      ],
+      "message_zh": "复杂物理效果（破碎/爆炸/碎片）可能产生可见伪影",
+      "message_en": "Complex physics described (shatter/explode/fragment): likely to produce visible artifacts in LTX output."
+    },
+    {
+      "rule": "character_count_warning",
+      "description": ">3 distinct characters may cause LTX quality degradation.",
+      "message_zh": "角色数超过 3，LTX 可能难以处理多角色场景",
+      "message_en": "Character count exceeds 3: LTX may struggle with many distinct characters."
+    },
+    {
+      "rule": "prompt_length_warning",
+      "description": "LTX works best with 4-8 well-structured sentences (English only).",
+      "message_zh": "英文提示词句数不在 4-8 推荐区间内",
+      "message_en": "Prompt sentence count outside 4-8 range: LTX works best with 4-8 well-structured sentences."
+    },
+    {
+      "rule": "conflicting_light_warning",
+      "description": "Front light + backlight in same shot produces unnatural results.",
+      "patterns_front": [
+        "\\b(front\\s*light|frontal\\s*light|front\\s*lighting|frontal\\s*lighting|key\\s*light|fill\\s*light)\\b"
+      ],
+      "patterns_back": [
+        "\\b(back\\s*light|backlight|back\\s*lighting|rim\\s*light|silhouette\\s*light|silhouette\\s*lighting)\\b"
+      ],
+      "message_zh": "冲突光照：同时存在前光和逆光描述，可能产生不自然画面",
+      "message_en": "Conflicting lighting: both front light and backlight described. This can produce unnatural-looking results."
+    }
+  ]
+}

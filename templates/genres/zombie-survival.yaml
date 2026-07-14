@@ -1,0 +1,92 @@
+# nuomi-drama-skills v2 — 丧尸求生题材模板
+# 平台导入时 shot_agent/axes/loader.py 按此表校验题材三轴。
+# 随 manuscript/genres/ 导入即生效（平台先查项目级 genre）。
+
+name: 丧尸求生
+genre_id: zombie-survival
+
+# ── 典型开场 ──────────────────────────────────────────────────────
+typical_setup: |
+  末日爆发后 N 天，幸存者小团体在废墟中挣扎求生。
+  主角因某个机缘（物资点/安全屋传言/亲人线索）踏上旅程，
+  途中遇队友、遭遇丧尸潮、遭遇人性背叛，
+  最终抵达或发现新威胁。
+
+# ── 核心冲突 ──────────────────────────────────────────────────────
+core_conflict:
+  - 资源匮乏 vs 团队生存需求
+  - 人性底线 vs 末日道德崩坏
+  - 团队信任 vs 背叛与猜疑
+  - 外部丧尸威胁 vs 内部分裂
+  - 希望与绝望的反复拉扯
+
+# ── 爽点类型 ──────────────────────────────────────────────────────
+satisfaction_types:
+  - 绝境反杀（主角逆境翻盘）
+  - 人性反转（恶人显善/善人堕落）
+  - 紧张脱逃（丧尸追猎、千钧一发）
+  - 资源战（智取物资、以弱胜强）
+  - 温情瞬间（共食、互救、承诺）
+
+# ── 禁忌 ──────────────────────────────────────────────────────────
+taboos:
+  - 不要过度渲染血腥暴力压低代入感，聚焦人物选择与后果
+  - 不要让末日沦为背景布景，生存压力要贯穿全程
+  - 不要团队内无逻辑冲突，背叛需有铺垫和代价
+  - 不要救援太轻松，每次脱逃都是代价
+  - 不要忽视伤病、饥渴、疲惫的现实描写
+  - 不要轻易"免疫"/"解药"消解末日张力
+
+# ── 目标受众 ──────────────────────────────────────────────────────
+target_audience:
+  age_range: "16-50"
+  gender_ratio: "M:F ≈ 55:45"
+  core_tags:
+    - 冒险/生存爱好者
+    - 人性博弈题材受众
+    - 末日废土文化圈
+    - 短剧高频反转用户
+
+# ── 推荐集数 ──────────────────────────────────────────────────────
+recommended_episodes:
+  min: 20
+  max: 60
+  typical: 30
+  unit_duration_sec: 90
+
+# 以下为 v3 新增字段（可选，缺则用默认值）
+style_defaults:
+  style_id_override: "real/cinematic-cool-v1"
+  color_bias: "desaturated cold, teal shadows, muted skin tones, bleach bypass grade"
+  negative_extra: "no vibrant colors, no warm sunlight, no clean polished environments, no cheerful atmosphere"
+
+tone_defaults:
+  情感温度: "冷峻"
+  动作密度: "强动作"
+  叙事节奏: "高频反转"
+
+generation_guardrails:
+  max_characters_per_shot: 3
+  preferred_shot_types: ["近景", "特写", "中景"]
+  avoid_shot_types: []
+
+# ── 出海映射 ──────────────────────────────────────────────────────
+overseas_mapping:
+  target_markets:
+    - en-US
+    - es-LA
+    - pt-BR
+    - id-ID
+  genre_labels:
+    en: "Zombie Survival"
+    es: "Supervivencia Zombi"
+    pt: "Sobrevivência Zumbi"
+    id: "Bertahan Hidup Zombie"
+  content_flags:
+    - violence_mild
+    - horror_mild
+    - emotional_intensity_medium
+  platform_fit:
+    - ReelShort
+    - DramaBox
+    - ShortMax

@@ -1,0 +1,30 @@
+{
+  "$schema": "nuomi-drama-skills/v2/visual_styles",
+  "$description": "Comic-style visual presets for LTX image/video generation. Each style appends prompt_suffix (appearance) and negative_suffix (what to avoid) to the base prompt.",
+  "styles": [
+    {
+      "style_id": "comic-flat",
+      "style_name": "Comic Flat (平面漫画)",
+      "prompt_suffix": "flat vector comic style, bold clean outlines, cel-shaded color blocks, limited palette with high contrast, comic panel aesthetic, crisp edges, graphic novel look, no gradients, pop art influence",
+      "negative_suffix": "3d render, realistic, photographic, soft shading, gradient, blur, depth of field, lens flare, motion blur"
+    },
+    {
+      "style_id": "comic-watercolor",
+      "style_name": "Comic Watercolor (水彩漫画)",
+      "prompt_suffix": "watercolor comic style, soft ink outlines, translucent washes, gentle color bleeding, textured paper grain, hand-painted feel, artistic brushstrokes, dreamy atmosphere, muted palette",
+      "negative_suffix": "3d render, realistic, photographic, hard edges, cel shading, vector art, digital flat colors, sharp contrast"
+    },
+    {
+      "style_id": "anime-cel",
+      "style_name": "Anime Cel (赛璐珞动画)",
+      "prompt_suffix": "traditional anime cel animation style, clean lineart, vibrant flat colors, cel shading with two-tone highlights, hand-painted backgrounds, 1990s anime aesthetic, crisp character silhouettes, subtle film grain",
+      "negative_suffix": "3d render, realistic, photographic, painterly, watercolor, soft focus, motion blur, lens effects"
+    },
+    {
+      "style_id": "manhwa-realistic",
+      "style_name": "Manhwa Realistic (韩漫写实)",
+      "prompt_suffix": "Korean manhwa realistic style, semi-realistic rendering, detailed facial features, soft gradients on skin, dramatic lighting with rim highlights, vertical scroll composition, polished digital art, urban fantasy aesthetic",
+      "negative_suffix": "flat vector, cartoon, chibi, exaggerated proportions, western comic, pixel art, low poly, 3d render"
+    }
+  ]
+}
