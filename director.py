@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 
 
 class Verdict(str, Enum):
@@ -82,7 +83,7 @@ class ShootProtocol:
     def save_history(self, path: Path) -> None:
         """Persist retake history to a JSON file."""
         import json
-        p = Path(path)
+        p = path if isinstance(path, Path) else Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(json.dumps(self._history, ensure_ascii=False, indent=2),
                        encoding="utf-8")
@@ -90,7 +91,7 @@ class ShootProtocol:
     def load_history(self, path: Path) -> None:
         """Restore retake history from a JSON file. Rebuilds budget from entries."""
         import json
-        p = Path(path)
+        p = path if isinstance(path, Path) else Path(path)
         if p.is_file():
             self._history = json.loads(p.read_text(encoding="utf-8"))
             for shot_id, entries in self._history.items():
