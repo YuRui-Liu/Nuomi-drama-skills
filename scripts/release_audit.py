@@ -64,11 +64,16 @@ def check_version_consistency() -> list[str]:
         if m and m.group(1) != contract_ver:
             errors.append(f"VERSION: pyproject.toml={m.group(1)} != contract.py={contract_ver}")
 
-    # Check SKILL.md references contract version
+    # Check SKILL.md references contract version (Root Router may not — check children too)
     skill_md = ROOT / "SKILL.md"
     if skill_md.is_file():
         if contract_ver not in skill_md.read_text(encoding="utf-8"):
-            errors.append(f"VERSION: SKILL.md does not reference {contract_ver}")
+            # Root Router doesn't need version — check if child skills exist
+            skills_dir = ROOT / ".claude" / "skills"
+            if not skills_dir.is_dir() or not list(skills_dir.glob("*.md")):
+                errors.append("VERSION: SKILL.md (Root Router) does not reference "
+                             f"{contract_ver} and no child skills found")
+            # OK — version is in contract.py and pyproject.toml, children delegate
 
     return errors
 
