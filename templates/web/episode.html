@@ -1,0 +1,43 @@
+{% extends "web/base.html" %}
+{% block title %}分镜预览 — {{ episode_label }}{% endblock %}
+
+{% block content %}
+<div style="border-bottom:1px solid #21262d; padding:0 0 10px; margin-bottom:12px;
+            display:flex; align-items:center; gap:12px">
+  <span style="font-size:15px;font-weight:600;color:#f0f6fc">E{{ ep }}</span>
+  <span style="font-size:12px;color:#8b949e">{{ shots|length }} 镜</span>
+</div>
+{% for s in shots %}
+<div style="display:flex;gap:10px;align-items:flex-start;background:#161b22;
+            border-radius:5px;border:1px solid #30363d;padding:10px;margin-bottom:8px">
+  {% if s.img_url %}
+  <img src="{{ s.img_url }}" style="width:54px;height:96px;border-radius:3px;
+            object-fit:cover;flex-shrink:0">
+  {% else %}
+  <div style="width:54px;height:96px;background:#1c1c1c;border-radius:3px;
+            flex-shrink:0;display:flex;align-items:center;justify-content:center;
+            color:#555;font-size:10px">⏳</div>
+  {% endif %}
+  <div style="flex:1;font-size:11px">
+    <div style="margin-bottom:4px">
+      <span style="color:#7ec87e;font-weight:600">{{ s.shot_id }}</span>
+      <span style="color:#8b949e;margin-left:6px">{{ s.duration }}s</span>
+      <span style="margin-left:auto;float:right">
+        {{ "🖼✅" if s.has_img else "🖼⏳" }}
+        {{ "🎬✅" if s.has_vid else "🎬⏳" }}
+        {{ "🎙️✅" if s.has_dub else ("🎙️—" if not s.has_dialogue else "🎙️⏳") }}
+      </span>
+    </div>
+    <div style="color:#c9d1d9;margin-bottom:4px">{{ s.action_desc }}</div>
+    {% if s.dialogue %}
+    {% for line in s.dialogue %}
+    <div style="padding:3px 6px;background:#0d1117;border-left:2px solid #7ec8e3;
+                border-radius:2px;margin-top:3px;color:#e3c87e;font-size:10px">
+      💬 <b>{{ line.speaker }}</b>（{{ line.emotion }}）：{{ line.text }}
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

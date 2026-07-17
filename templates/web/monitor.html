@@ -1,0 +1,135 @@
+{% extends "web/base.html" %}
+{% block title %}生成监控 — {{ project_title }}{% endblock %}
+
+{% block content %}
+<div class="topbar">
+  <h1>📡 生成监控</h1>
+  <div class="tabs">
+    <button class="tab active" data-stage="all" onclick="filterStage('all', this)">全部</button>
+    <button class="tab" data-stage="images" onclick="filterStage('images', this)">🖼 图片</button>
+    <button class="tab" data-stage="video" onclick="filterStage('video', this)">🎬 视频</button>
+    <button class="tab" data-stage="dub" onclick="filterStage('dub', this)">🎙️ 配音</button>
+  </div>
+</div>
+
+<!-- Overall progress -->
+<div class="card">
+  <h3>整体进度</h3>
+  <div>
+    <span>图片: </span>
+    <span style="color:#58a6ff" id="img-done">—</span>/<span id="img-total">—</span>
+    <div class="progress-bar"><div class="progress-fill images" id="img-bar" style="width:0%"></div></div>
+  </div>
+  <div>
+    <span>视频: </span>
+    <span style="color:#7ec87e" id="vid-done">—</span>/<span id="vid-total">—</span>
+    <div class="progress-bar"><div class="progress-fill video" id="vid-bar" style="width:0%"></div></div>
+  </div>
+  <div>
+    <span>配音: </span>
+    <span style="color:#d29922" id="dub-done">—</span>/<span id="dub-total">—</span>
+    <div class="progress-bar"><div class="progress-fill dub" id="dub-bar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- Shot status -->
+<div class="card">
+  <h3>镜头状态</h3>
+  <div id="shot-container">等待 SSE 数据...</div>
+</div>
+
+<!-- Provider health -->
+<div class="card">
+  <h3>Provider 健康</h3>
+  <div id="provider-container" class="provider-row">等待 SSE 数据...</div>
+</div>
+
+<script>
+var currentStage = 'all';
+var lastShotHTML = '';
+
+function filterStage(s, btn) {
+  currentStage = s;
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function renderShots(data) {
+  if (!data || !data.episodes) return '<p style="color:#8b949e;font-size:12px">暂无数据</p>';
+  var html = '';
+  data.episodes.forEach(function(ep){
+    var epDone = 0, epTotal = ep.shots.length;
+    ep.shots.forEach(function(s){
+      if (s.state === 'observed' || s.state === 'accepted') epDone++;
+    });
+    var epColor = epDone === epTotal ? '#238636' : (epDone > 0 ? '#d29922' : '#484f58');
+    html += '<details class="ep-section" open><summary style="color:' + epColor + '">' +
+      'E' + ep.ep + ' ▸ ' + epDone + '/' + epTotal + ' 镜完成</summary>' +
+      '<div class="shot-grid">';
+    ep.shots.forEach(function(s){
+      if (currentStage !== 'all' && s.stage !== currentStage) return;
+      var cls = s.state === 'observed' || s.state === 'accepted' ? 'ready' :
+                s.state === 'generating' ? 'generating' :
+                s.state === 'failed' ? 'failed' : 'pending';
+      var retryBtn = s.state === 'failed' ? ' <button class="btn danger" style="font-size:9px;padding:2px 5px" onclick="retryShot('+ep.ep+',\''+s.shot_id+'\')">⏎</button>' : '';
+      html += '<div class="shot-dot ' + cls + '" title="' + s.shot_id + ': ' + s.state +
+        (s.error_count > 0 ? ' (' + s.error_count + ' errors)' : '') + '">' +
+        s.shot_id.replace('s','') + '</div>' + retryBtn;
+    });
+    html += '</div></details>';
+  });
+  return html;
+}
+
+function retryShot(ep, shotId) {
+  fetch('/api/retry', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ep: ep, shot_id: shotId})
+  }).then(function(r){ return r.json(); })
+   .then(function(d){ showToast(d.message); });
+}
+
+function updateUI(data) {
+  var summary = data.summary || {};
+  // Update progress bars
+  var stages = {images: 'img', video: 'vid', dub: 'dub'};
+  Object.keys(stages).forEach(function(s){
+    var prefix = stages[s];
+    var ep = (summary.episodes || [])[0];
+    if (ep && ep[s]) {
+      document.getElementById(prefix + '-done').textContent = ep[s].done;
+      document.getElementById(prefix + '-total').textContent = ep[s].total;
+      var pct = ep[s].total > 0 ? (ep[s].done / ep[s].total * 100) : 0;
+      document.getElementById(prefix + '-bar').style.width = pct + '%';
+    }
+  });
+  // Update shots
+  var shotHTML = renderShots(data.aosop);
+  if (shotHTML !== lastShotHTML) {
+    document.getElementById('shot-container').innerHTML = shotHTML;
+    lastShotHTML = shotHTML;
+  }
+  // Update providers
+  if (data.providers) {
+    var phtml = '';
+    data.providers.forEach(function(p){
+      phtml += '<span class="provider-dot ' + p.status + '"></span> ' + p.name + ' ';
+    });
+    document.getElementById('provider-container').innerHTML = phtml;
+  }
+}
+
+// SSE connection
+function connectSSE() {
+  var source = new EventSource('/api/monitor/stream');
+  source.onmessage = function(e) {
+    try { updateUI(JSON.parse(e.data)); } catch(err) {}
+  };
+  source.onerror = function() {
+    setTimeout(connectSSE, 3000);
+  };
+}
+connectSSE();
+</script>
+{% endblock %}

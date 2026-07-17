@@ -1,0 +1,40 @@
+{% extends "web/base.html" %}
+{% block title %}资源库 — {{ project_title }}{% endblock %}
+
+{% block content %}
+<h2 style="color:#f0f6fc;font-size:13px;font-weight:600;margin:0 0 14px">📦 资源库</h2>
+{% for section in sections %}
+<div style="margin-bottom:18px">
+  <div style="font-size:11px;color:#7ec87e;font-weight:600;margin-bottom:6px;
+              padding-bottom:4px;border-bottom:1px solid #21262d">
+    {{ section.label }}（{{ section.rows|length }}）
+  </div>
+  {% for item in section.rows %}
+  <div style="display:flex;gap:10px;align-items:center;background:#161b22;
+              border-radius:4px;border:1px solid #30363d;padding:8px;margin-bottom:4px">
+    {% if item.img_url %}
+    <img src="{{ item.img_url }}" style="width:36px;height:64px;border-radius:3px;
+              object-fit:cover;flex-shrink:0">
+    {% else %}
+    <div style="width:36px;height:64px;background:#1c1c1c;border-radius:3px;
+              flex-shrink:0;display:flex;align-items:center;justify-content:center;
+              color:#555;font-size:9px">⏳</div>
+    {% endif %}
+    <div style="flex:1;font-size:11px">
+      <div style="color:#c9d1d9;font-weight:600;margin-bottom:2px">{{ item.name }}</div>
+      {% if item.description %}
+      <div style="color:#777;font-size:10px">{{ item.description }}</div>
+      {% endif %}
+    </div>
+    <div style="display:flex;gap:8px;font-size:12px;flex-shrink:0">
+      {% if item.has_img is defined %}{{ "🖼✅" if item.has_img else "🖼⏳" }}{% endif %}
+      {% if item.has_voice is defined %}{{ "🎙️✅" if item.has_voice else "🎙️⏳" }}{% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+{% if not sections %}
+<p style="color:#555;font-size:12px">registry.json 为空，暂无资源。</p>
+{% endif %}
+{% endblock %}

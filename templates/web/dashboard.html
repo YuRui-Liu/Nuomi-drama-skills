@@ -1,0 +1,115 @@
+{% extends "web/base.html" %}
+{% block title %}仪表板 — {{ project_title }}{% endblock %}
+
+{% block content %}
+<div class="topbar">
+  <h1>📊 {{ project_title or "项目仪表板" }}</h1>
+</div>
+
+<div style="display:grid;grid-template-columns:220px 1fr;gap:16px">
+
+  <!-- Left panel -->
+  <div>
+    <div class="card">
+      <h3>⚙️ 操作</h3>
+      <div class="btn-group" style="flex-direction:column">
+        <button class="btn" onclick="apiPost('/api/export', function(d){location.reload()})">
+          📝 编译导出
+        </button>
+        <button class="btn primary" onclick="apiPost('/api/generate/images')">
+          🖼 出图
+        </button>
+        <button class="btn" onclick="apiPost('/api/generate/video')">
+          🎬 出视频
+        </button>
+        <button class="btn" onclick="apiPost('/api/generate/dub')">
+          🎙️ 配音
+        </button>
+        <button class="btn" onclick="apiPost('/api/review', function(d){location.reload()})">
+          📋 审查
+        </button>
+        <button class="btn" onclick="apiPost('/api/compliance', function(d){location.reload()})">
+          🛡️ 合规
+        </button>
+        <button class="btn" onclick="apiPost('/api/exporters/srt')">
+          📄 导出 SRT
+        </button>
+        <button class="btn" onclick="apiPost('/api/exporters/ffmpeg')">
+          🎞️ 导出 FFmpeg
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📋 项目信息</h3>
+      <div style="font-size:12px;line-height:1.8">
+        阶段: <strong>{{ phase or "—" }}</strong><br>
+        剧集: {{ completed_episodes }}/{{ total_episodes }}<br>
+        审查: {% if review_total %}{{ review_total }}/50 ({{ review_grade }}){% else %}未审查{% endif %}<br>
+        合规: {% if compliance_ok %}✅ 通过{% else %}⚠️ {{ red_lines }} 红线{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <div>
+    <!-- AOSOP Summary -->
+    <div class="card">
+      <h3>📈 进度概览</h3>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="num" style="color:#7ec87e">{{ aosop.accepted }}</div>
+          <div class="label">已接受</div>
+        </div>
+        <div class="stat">
+          <div class="num" style="color:#58a6ff">{{ aosop.observed }}</div>
+          <div class="label">已生成</div>
+        </div>
+        <div class="stat">
+          <div class="num" style="color:#f85149">{{ aosop.failed }}</div>
+          <div class="label">失败</div>
+        </div>
+        <div class="stat">
+          <div class="num" style="color:#8b949e">{{ aosop.planned }}</div>
+          <div class="label">计划中</div>
+        </div>
+        <div class="stat">
+          <div class="num">{{ aosop.total_shots }}</div>
+          <div class="label">总镜头</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Episode progress -->
+    <div class="card">
+      <h3>📺 按集进度</h3>
+      <div class="ep-row">
+        {% for ep in episode_list %}
+        <div class="ep-chip {{ ep.css_class }}" title="E{{ ep.n }}: {{ ep.done }}/{{ ep.total }} 镜">
+          {{ ep.n }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Review & Compliance -->
+    <div class="card">
+      <h3>📝 审查与合规</h3>
+      <div style="display:flex;gap:20px">
+        <div>
+          <span style="font-size:24px;font-weight:700;color:
+            {% if review_total and review_total >= 38 %}#7ec87e{% elif review_total and review_total >= 30 %}#d29922{% else %}#f85149{% endif %}
+          ">{{ review_total or "—" }}</span>/50
+          <span style="font-size:12px;color:#8b949e;margin-left:6px">{{ review_grade or "" }}</span>
+        </div>
+        <div>
+          <span style="font-size:24px;font-weight:700;color:
+            {% if red_lines == 0 %}#7ec87e{% else %}#f85149{% endif %}
+          ">{{ red_lines }}</span>
+          <span style="font-size:12px;color:#8b949e">红线 / {{ gray_zones }} 灰区</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
