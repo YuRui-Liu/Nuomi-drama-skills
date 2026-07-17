@@ -128,6 +128,17 @@ def _dry_run_video(out: Path, ep: int, ctx: dict, stats: dict, force: bool = Fal
             stats["checks"].append(f"E{ep}/{sid}: 缺 video_prompt，将回退 action_desc")
         stats["done"] += 1
 
+def _episode_count(out_dir: str) -> int:
+    """Read series.json and return episode_count."""
+    sp = Path(out_dir) / "series.json"
+    if not sp.exists():
+        return 1
+    try:
+        series = json.loads(sp.read_text(encoding="utf-8"))
+        return int(series.get("episode_count", 1))
+    except (OSError, json.JSONDecodeError, ValueError):
+        return 1
+
 
 def _dry_run_dub(out: Path, ep: int, ctx: dict, stats: dict, force: bool = False) -> None:
     sb = ctx.get("storyboard") or {}
@@ -149,10 +160,6 @@ def _dry_run_dub(out: Path, ep: int, ctx: dict, stats: dict, force: bool = False
                 stats["skipped"] += 1
                 continue
             stats["done"] += 1
-    sp = Path(out_dir) / "series.json"
-    if sp.exists():
-        return int(json.loads(sp.read_text(encoding="utf-8")).get("episode_count", 1))
-    return 1
 
 
 def run_images(out_dir: str, ep_range: list[int], force: bool = False,
