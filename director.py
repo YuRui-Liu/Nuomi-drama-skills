@@ -78,6 +78,24 @@ class ShootProtocol:
             return "最后一次尝试，建议改变策略（尝试不同 seed 或修改 prompt 关键句）"
         return None
 
+    # ── 持久化 ─────────────────────────────────────────────────────
+    def save_history(self, path: Path) -> None:
+        """Persist retake history to a JSON file."""
+        import json
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps(self._history, ensure_ascii=False, indent=2),
+                       encoding="utf-8")
+
+    def load_history(self, path: Path) -> None:
+        """Restore retake history from a JSON file. Rebuilds budget from entries."""
+        import json
+        p = Path(path)
+        if p.is_file():
+            self._history = json.loads(p.read_text(encoding="utf-8"))
+            for shot_id, entries in self._history.items():
+                self._budget[shot_id] = len(entries)
+
     # ── 判决辅助逻辑（供 Agent 参考，非自动判定） ──────────────────
     @staticmethod
     def suggest_verdict(issues: list[str]) -> ShotVerdict:

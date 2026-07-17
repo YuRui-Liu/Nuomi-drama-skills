@@ -1,0 +1,28 @@
+[project]
+name = "nuomi-drama-skills"
+version = "2026-06-20"
+description = "长篇竖屏短剧 AI 创作助手 — 从立意到分镜表的完整创作管线"
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "YuRui-Liu"}
+]
+dependencies = [
+    "httpx",
+    "Pillow",
+    "flask",
+    "numpy",
+    "google-genai",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v --tb=short"

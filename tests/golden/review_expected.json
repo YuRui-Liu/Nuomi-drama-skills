@@ -1,0 +1,6 @@
+{
+  "min_total": 20,
+  "max_total": 50,
+  "required_dimensions": ["format", "continuity", "prompt_quality", "char_consistency", "satisfaction"],
+  "valid_grades": ["卓越", "优良", "合格", "需改进", "无内容"]
+}
