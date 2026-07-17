@@ -1,4 +1,4 @@
-"""Resource naming helpers. VENDORED FROM shot_agent/resources/names.py @ CONTRACT 2026-06-18.
+"""Resource naming helpers. VENDORED FROM shot_agent/resources/names.py @ CONTRACT 2026-06-20.
 角色 canonical id 使用短名;括号描述只进入 meta/aliases。Parity-tested in tests/skill_export/test_names.py."""
 from __future__ import annotations
 

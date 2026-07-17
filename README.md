@@ -338,7 +338,7 @@ nuomi-drama-skills/
 ├── modes/                       # 模式切换
 │   └── __init__.py
 │
-├── reference/                   # 离线参考文档
+├── references/                   # 离线参考文档
 │   ├── 创作方法论.md             # 各阶段宪章 + 批判环判据
 │   ├── 平台契约.md               # 冻结平台契约（导入机制 / JSON 结构）
 │   ├── 剧本格式规范.md           # 结构化剧本格式
@@ -394,10 +394,10 @@ MIT
 
 ## 相关文档
 
-- [创作方法论](reference/创作方法论.md) — 各阶段宪章、批判环判据、三轴基调、叙事组方法
-- [平台契约](reference/平台契约.md) — 冻结的平台导入机制与 JSON 结构说明
-- [剧本格式规范](reference/剧本格式规范.md) — 结构化剧本格式
-- [分镜表规范](reference/分镜表规范.md) — 分镜表 schema 与叙事组规则
-- [提示词规则](reference/提示词规则.md) — 双语运动提示词（video_prompt 中文三段 + video_prompt_en）
-- [图像生成管线实操](reference/图像生成管线实操.md) — 出图替代方案与诊断脚本
-- [自定义题材创作](reference/自定义题材创作.md) — 自定义题材 YAML 编写指南
+- [创作方法论](references/创作方法论.md) — 各阶段宪章、批判环判据、三轴基调、叙事组方法
+- [平台契约](references/平台契约.md) — 冻结的平台导入机制与 JSON 结构说明
+- [剧本格式规范](references/剧本格式规范.md) — 结构化剧本格式
+- [分镜表规范](references/分镜表规范.md) — 分镜表 schema 与叙事组规则
+- [提示词规则](references/提示词规则.md) — 双语运动提示词（video_prompt 中文三段 + video_prompt_en）
+- [图像生成管线实操](references/图像生成管线实操.md) — 出图替代方案与诊断脚本
+- [自定义题材创作](references/自定义题材创作.md) — 自定义题材 YAML 编写指南
