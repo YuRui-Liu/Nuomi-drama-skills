@@ -129,14 +129,18 @@ def _dry_run_video(out: Path, ep: int, ctx: dict, stats: dict, force: bool = Fal
         stats["done"] += 1
 
 def _episode_count(out_dir: str) -> int:
-    """Read series.json and return episode_count."""
+    """Return episode_count from series.json, defaulting to 1.
+
+    Returns 1 when the file is missing, unparseable, or the key is absent/null.
+    """
     sp = Path(out_dir) / "series.json"
     if not sp.exists():
         return 1
     try:
         series = json.loads(sp.read_text(encoding="utf-8"))
-        return int(series.get("episode_count", 1))
-    except (OSError, json.JSONDecodeError, ValueError):
+        v = series.get("episode_count")
+        return int(v) if v is not None else 1
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
         return 1
 
 
