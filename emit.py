@@ -62,7 +62,17 @@ def _registry_entry(rtype: str, rid: str, spec: dict, existing: dict | None) -> 
     if rtype == "character" and raw and raw != norm and raw not in aliases:
         aliases.append(raw)                                  # paren-form kept as alias
     meta = dict((existing or {}).get("meta") or {})
-    meta["appearance"] = spec.get("外貌") or spec.get("appearance") or meta.get("appearance", "")
+    appearance = spec.get("外貌") or spec.get("appearance") or meta.get("appearance", "")
+    if not appearance:
+        # ── Fallback: merge Markdown-table-native keys for scenes/props ──
+        parts = []
+        for key in ("氛围", "核心标志物", "外观", "外观描述", "描述", "标志物"):
+            val = spec.get(key)
+            if val:
+                parts.append(str(val) if isinstance(val, str) else ", ".join(val))
+        if parts:
+            appearance = "; ".join(parts)
+    meta["appearance"] = appearance
     if spec.get("描述"):
         meta["description"] = spec["描述"]
     if aliases:
